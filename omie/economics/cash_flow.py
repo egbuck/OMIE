@@ -6,11 +6,11 @@ class AddProject(tk.Tk):
         # Initialize Tk() class
         super().__init__()
 
-        # Title & Size of Window
+        ## Title & Size of Window
         self.title("Project Dialog")
-        self.geometry("400x400")  # width x height
+        self.geometry("425x400")  # width x height
 
-        # Default Parameters
+        ## Default Parameters
         self.ini_name = "Project1"
         self.ini_num_invest, self.ini_num_flows = 0, 5
         self.ini_rand_data = True
@@ -19,7 +19,7 @@ class AddProject(tk.Tk):
         self.ini_depreciation, self.ini_distribution, self.ini_estimate = \
             "None", "Triangular", "Mean"
 
-        # Entry widgets & their labels
+        ## Entry widgets & their labels
         self.name_label, self.name = \
             tk.Label(self, text="Name"), tk.Entry(self)
         self.num_invest_label, self.num_invest = \
@@ -27,14 +27,7 @@ class AddProject(tk.Tk):
         self.num_flows_label, self.num_flows = \
             tk.Label(self, text = "Number of Cash Flows"), tk.Entry(self)
 
-        self.name_label.grid(row=0,column=0)
-        self.name.grid(row=0,column=1)
-        self.num_invest_label.grid(row=1,column=0)
-        self.num_invest.grid(row=1,column=1)
-        self.num_flows_label.grid(row=2,column=0)
-        self.num_flows.grid(row=2,column=1)
-
-        # Checkboxes & their labels
+        ## Checkboxes & their labels
         self.rand_data = tk.BooleanVar()
         self.mult = tk.BooleanVar()
         self.inflation = tk.BooleanVar()
@@ -52,13 +45,7 @@ class AddProject(tk.Tk):
         self.uncertainty_button = tk.Checkbutton(self,
             text="Include Uncertainty", variable=self.uncertainty)
 
-        self.rand_data_button.grid(row=3, column=0, sticky=tk.W)
-        self.mult_button.grid(row=4, column=0, sticky=tk.W)
-        self.inflation_button.grid(row=5, column=0, sticky=tk.W)
-        self.taxes_button.grid(row=3, column=1, sticky=tk.W)
-        self.uncertainty_button.grid(row=4, column=1, sticky=tk.W)
-
-        # Radio Buttons & their labels
+        ## Radio Buttons & their labels
         # Depreciation
         self.depreciation = tk.StringVar()
         self.depreciation_options = [
@@ -72,10 +59,9 @@ class AddProject(tk.Tk):
         for text, option in self.depreciation_options:
             b = tk.Radiobutton(self, text=text,
                 variable=self.depreciation, value=option)
-            b.grid(row = row_index, column = 0, sticky = tk.W, padx = 5, pady = 5)
+            b.grid(row = row_index, column = 0, sticky = tk.W)
             row_index += 1
         self.depreciation_label = tk.Label(self, text = "Depreciation")
-        self.depreciation_label.grid(row=6, column = 0)
 
         # Distribution
         self.distribution = tk.StringVar()
@@ -90,10 +76,9 @@ class AddProject(tk.Tk):
         for text, option in self.distribution_options:
             b = tk.Radiobutton(self, text=text,
                 variable=self.distribution, value=option)
-            b.grid(row = row_index, column = 1, sticky = tk.W, padx = 5, pady = 5)
+            b.grid(row = row_index, column = 1, sticky = tk.W)
             row_index += 1
         self.distribution_label = tk.Label(self, text = "Distribution")
-        self.distribution_label.grid(row=6, column = 1)
 
         # Estimate Function
         self.estimate = tk.StringVar()
@@ -106,22 +91,46 @@ class AddProject(tk.Tk):
         for text, option in self.estimate_options:
             b = tk.Radiobutton(self, text=text,
                 variable=self.estimate, value=option)
-            b.grid(row = row_index, column = 2, sticky = tk.W, padx = 5, pady = 5)
+            b.grid(row = row_index, column = 2, sticky = tk.W)
             row_index += 1
         self.estimate_label = tk.Label(self, text = "Estimate")
-        self.estimate_label.grid(row=6, column = 2)
 
-        # Buttons - Update, Save, Cancel, Default
-        self.update_button = tk.Button(self, text = "Update", command=self.update_table)
-        self.save_button = tk.Button(self, text = "Save", command = self.save_project)
-        self.cancel_button = tk.Button(self, text = "Cancel", command = self.cancel_project)
-        self.default_button = tk.Button(self, text = "Default", command = self.restore_defaults)
-        self.update_button.grid(row=0, column=2)
-        self.save_button.grid(row=1, column = 2)
-        self.cancel_button.grid(row=2, column = 2)
-        self.default_button.grid(row=3, column = 2)
+        ## Buttons - Update, Save, Main Menu, Default, Cash Flow Analysis
+        self.update_button = tk.Button(self, text = "Update Table", command=self.update_table)
+        self.save_button = tk.Button(self, text = "Save Project", command = self.save_project)
+        self.return_button = tk.Button(self, text = "Return To Main Menu", command = self.return_to_main_menu)
+        self.default_button = tk.Button(self, text = "Default Params", command = self.restore_defaults)
+        self.cash_flow_button = tk.Button(self, text = "Run Cash Flow Analysis", command = self.cash_flow_analysis)
 
-        # Fill widgets with their default values
+        ## Place Widgets in Grids (Except Radio Buttons: Row 7 through 11)
+        # Entries
+        self.name_label.grid(row = 0, column = 0, sticky = tk.E)
+        self.name.grid(row = 0, column = 1)
+        self.num_invest_label.grid(row = 1, column = 0, sticky = tk.E)
+        self.num_invest.grid(row = 1, column = 1)
+        self.num_flows_label.grid(row = 2, column = 0, sticky = tk.E)
+        self.num_flows.grid(row = 2, column = 1)
+
+        # Checkboxes
+        self.rand_data_button.grid(row = 3, column = 0, sticky = tk.W)
+        self.mult_button.grid(row = 4, column = 0, sticky = tk.W)
+        self.inflation_button.grid(row = 5, column = 0, sticky = tk.W)
+        self.taxes_button.grid(row = 3, column = 1, sticky = tk.W)
+        self.uncertainty_button.grid(row = 4, column = 1, sticky = tk.W)
+
+        # Radio Button Labels
+        self.depreciation_label.grid(row = 6, column = 0, sticky = tk.W, pady=(10,0))
+        self.distribution_label.grid(row = 6, column = 1, sticky = tk.W, pady=(10,0))
+        self.estimate_label.grid(row = 6, column = 2, sticky = tk.W, pady=(10,0))
+
+        # Command Buttons
+        self.update_button.grid(row = 0, column = 2, padx = 5)
+        self.save_button.grid(row = 1, column = 2, padx = 5)
+        self.return_button.grid(row = 2, column = 2, padx = 5)
+        self.default_button.grid(row = 3, column = 2, padx = 5)
+        self.cash_flow_button.grid(row = 4, column = 2, padx = 5)
+
+        ## Fill widgets with their default values
         self.restore_defaults()
 
     def save_project(self):
@@ -137,8 +146,8 @@ class AddProject(tk.Tk):
         """
         pass
 
-    def cancel_project(self):
-        """Cancel the addition of project & go back to main menu"""
+    def return_to_main_menu(self):
+        """Return to the Main Menu GUI"""
         pass
 
     def restore_defaults(self):
@@ -163,6 +172,10 @@ class AddProject(tk.Tk):
         self.depreciation.set(self.ini_depreciation)
         self.distribution.set(self.ini_distribution)
         self.estimate.set(self.ini_estimate)
+
+    def cash_flow_analysis(self):
+        """Run the Cash Flow Analysis of this Project, and show the results"""
+        pass
 
 
 if __name__ == "__main__":
