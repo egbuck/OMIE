@@ -1,5 +1,5 @@
 import tkinter as tk
-from cash_flow import AddProject
+from add_project import AddProject
 
 def return_to_main_menu(window):
     """Return to the Main Menu GUI"""
@@ -14,8 +14,9 @@ class Economics(tk.Tk):
 
     def __init__(self):
         super().__init__()
-        # Window Name
+        # Window Name & Size
         self.title("OMIE - Economics")
+        self.geometry("425x350")  # width x height
 
         # Set dummy frame to destroy and create/pack main menu frame
         self.current_frame = tk.Frame()

@@ -1,14 +1,9 @@
 import tkinter as tk
-import tkinter.messagebox as msg
 
 class AddProject(tk.Frame):
     def __init__(self):
         # Initialize Tk() class
         super().__init__()
-
-        ## Title & Size of Window
-        #self.title("Project Dialog")
-        #self.geometry("425x350")  # width x height
 
         ## Default Parameters
         self.ini_name = "Project1"
