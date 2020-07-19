@@ -1,14 +1,14 @@
 import tkinter as tk
 import tkinter.messagebox as msg
 
-class AddProject(tk.Tk):
+class AddProject(tk.Frame):
     def __init__(self):
         # Initialize Tk() class
         super().__init__()
 
         ## Title & Size of Window
-        self.title("Project Dialog")
-        self.geometry("425x400")  # width x height
+        #self.title("Project Dialog")
+        #self.geometry("425x350")  # width x height
 
         ## Default Parameters
         self.ini_name = "Project1"
@@ -21,7 +21,7 @@ class AddProject(tk.Tk):
 
         ## Entry widgets & their labels
         self.name_label, self.name = \
-            tk.Label(self, text="Name"), tk.Entry(self)
+            tk.Label(self, text="Project Name"), tk.Entry(self)
         self.num_invest_label, self.num_invest = \
             tk.Label(self, text = "Number of Investments"), tk.Entry(self)
         self.num_flows_label, self.num_flows = \
@@ -55,7 +55,7 @@ class AddProject(tk.Tk):
             ("SYD", "SYD"),
             ("DRDB", "DRDB")
         ]
-        row_index = 7
+        row_index = 8
         for text, option in self.depreciation_options:
             b = tk.Radiobutton(self, text=text,
                 variable=self.depreciation, value=option)
@@ -72,7 +72,7 @@ class AddProject(tk.Tk):
             ("Normal", "Normal"),
             ("General", "General")
         ]
-        row_index = 7
+        row_index = 8
         for text, option in self.distribution_options:
             b = tk.Radiobutton(self, text=text,
                 variable=self.distribution, value=option)
@@ -87,7 +87,7 @@ class AddProject(tk.Tk):
             ("Quantile", "Quantile"),
             ("Simulate", "Simulate")
         ]
-        row_index = 7
+        row_index = 8
         for text, option in self.estimate_options:
             b = tk.Radiobutton(self, text=text,
                 variable=self.estimate, value=option)
@@ -95,12 +95,8 @@ class AddProject(tk.Tk):
             row_index += 1
         self.estimate_label = tk.Label(self, text = "Estimate")
 
-        ## Buttons - Update, Save, Main Menu, Default, Cash Flow Analysis
-        self.update_button = tk.Button(self, text = "Update Table", command=self.update_table)
-        self.save_button = tk.Button(self, text = "Save Project", command = self.save_project)
-        self.return_button = tk.Button(self, text = "Return To Main Menu", command = self.return_to_main_menu)
+        ## Default Button - other buttons in Economics method
         self.default_button = tk.Button(self, text = "Default Params", command = self.restore_defaults)
-        self.cash_flow_button = tk.Button(self, text = "Run Cash Flow Analysis", command = self.cash_flow_analysis)
 
         ## Place Widgets in Grids (Except Radio Buttons: Row 7 through 11)
         # Entries
@@ -115,40 +111,19 @@ class AddProject(tk.Tk):
         self.rand_data_button.grid(row = 3, column = 0, sticky = tk.W)
         self.mult_button.grid(row = 4, column = 0, sticky = tk.W)
         self.inflation_button.grid(row = 5, column = 0, sticky = tk.W)
-        self.taxes_button.grid(row = 3, column = 1, sticky = tk.W)
-        self.uncertainty_button.grid(row = 4, column = 1, sticky = tk.W)
+        self.taxes_button.grid(row = 6, column = 0, sticky = tk.W)
+        self.uncertainty_button.grid(row = 6, column = 1, sticky = tk.W)
 
         # Radio Button Labels
-        self.depreciation_label.grid(row = 6, column = 0, sticky = tk.W, pady=(10,0))
-        self.distribution_label.grid(row = 6, column = 1, sticky = tk.W, pady=(10,0))
-        self.estimate_label.grid(row = 6, column = 2, sticky = tk.W, pady=(10,0))
+        self.depreciation_label.grid(row = 7, column = 0, sticky = tk.W, pady=(3,0))
+        self.distribution_label.grid(row = 7, column = 1, sticky = tk.W, pady=(3,0))
+        self.estimate_label.grid(row = 7, column = 2, sticky = tk.W, pady=(3,0))
 
         # Command Buttons
-        self.update_button.grid(row = 0, column = 2, padx = 5)
-        self.save_button.grid(row = 1, column = 2, padx = 5)
-        self.return_button.grid(row = 2, column = 2, padx = 5)
-        self.default_button.grid(row = 3, column = 2, padx = 5)
-        self.cash_flow_button.grid(row = 4, column = 2, padx = 5)
+        self.default_button.grid(row = 2, column = 2, padx = 5)
 
         ## Fill widgets with their default values
         self.restore_defaults()
-
-    def save_project(self):
-        """Saving relevant project information/parameters..."""
-        pass
-        self.name
-
-    def update_table(self):
-        """
-        Update layout of table based on Num Flows & Num Investments
-
-        Keep entries of flows/investments as much as possible
-        """
-        pass
-
-    def return_to_main_menu(self):
-        """Return to the Main Menu GUI"""
-        pass
 
     def restore_defaults(self):
         """Restore parameters to their default values"""
@@ -172,10 +147,6 @@ class AddProject(tk.Tk):
         self.depreciation.set(self.ini_depreciation)
         self.distribution.set(self.ini_distribution)
         self.estimate.set(self.ini_estimate)
-
-    def cash_flow_analysis(self):
-        """Run the Cash Flow Analysis of this Project, and show the results"""
-        pass
 
 
 if __name__ == "__main__":
