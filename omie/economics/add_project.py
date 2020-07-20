@@ -146,6 +146,5 @@ class AddProject(tk.Frame):
 
 if __name__ == "__main__":
     project_frame = AddProject()
-    window = tk.Tk()
-    project_frame.pack(window)
-    window.mainloop()
+    project_frame.pack(fill="both", expand=True)
+    project_frame.mainloop()
