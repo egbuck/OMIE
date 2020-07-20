@@ -35,7 +35,7 @@ class ParamDetail(tk.Frame):
         # Main Table - Title & Headers
         self.table_title = tk.Label(self, 
             text = ("Cash Flow Data - Amounts Negative for "
-            "Expenditures and Positive for Revenues"), font = "Helvetica 10 bold")
+            "Expenditures and Positive for Revenues"), font = "Helvetica 9 bold")
         self.table_headers = [
             tk.Label(self, text = "Index", font = "Helvetica 8 bold"),
             tk.Label(self, text = "Description", font = "Helvetica 8 bold"),
@@ -109,7 +109,8 @@ class ParamDetail(tk.Frame):
         self.rate_percent.grid(row = 1, column = 5)
 
         # Main Table Title & Headers
-        self.table_title.grid(row = 5, column = 0, columnspan = 7, sticky = tk.W)
+        self.table_title.grid(row = 5, column = 0, columnspan = 7, 
+            sticky = tk.W, pady = (15,0))
         for col_index, header in enumerate(self.table_headers):
             header.grid(row = 6, column = col_index)
 
