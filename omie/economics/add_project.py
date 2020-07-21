@@ -5,7 +5,7 @@ class AddProject(tk.Frame):
         # Initialize Tk() class
         super().__init__()
 
-        ## Default Parameters
+        ## Default Parameters & Title
         self.ini_name = "Project1"
         self.ini_num_invest, self.ini_num_flows = 0, 5
         self.ini_rand_data = True
@@ -13,6 +13,9 @@ class AddProject(tk.Frame):
             False, False, False, False
         self.ini_depreciation, self.ini_distribution, self.ini_estimate = \
             "None", "Triangular", "Mean"
+
+        ## Window Title
+        self.master.title("Add Project")
 
         ## Entry widgets & their labels
         self.name_label, self.name = \
@@ -90,9 +93,6 @@ class AddProject(tk.Frame):
             row_index += 1
         self.estimate_label = tk.Label(self, text = "Estimate")
 
-        ## Default Button - other buttons in Economics method
-        self.default_button = tk.Button(self, text = "Default Params", command = self.restore_defaults)
-
         ## Place Widgets in Grids (Except Radio Buttons: Row 7 through 11)
         # Entries
         self.name_label.grid(row = 0, column = 0, sticky = tk.E)
@@ -113,9 +113,6 @@ class AddProject(tk.Frame):
         self.depreciation_label.grid(row = 7, column = 0, sticky = tk.W, pady=(3,0))
         self.distribution_label.grid(row = 7, column = 1, sticky = tk.W, pady=(3,0))
         self.estimate_label.grid(row = 7, column = 2, sticky = tk.W, pady=(3,0))
-
-        # Command Buttons
-        self.default_button.grid(row = 2, column = 2, padx = 5)
 
         ## Fill widgets with their default values
         self.restore_defaults()
