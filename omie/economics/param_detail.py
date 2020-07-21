@@ -8,7 +8,12 @@ class ParamDetail(tk.Frame):
             "mult", "inflation", "taxes", "uncertainty",
             "depreciation", "distribution", "estimate"]
         for attr in attr_list:
-            setattr(self, attr, getattr(Proj, attr))
+            if attr in ["num_invest", "num_flows"]:
+                setattr(self, attr, int(getattr(Proj, attr).get()))
+            elif attr == "name":
+                setattr(self, attr, getattr(Proj, attr).get())
+            else:
+                setattr(self, attr, getattr(Proj, attr))
         self.type_choices = ["Single", "Uniform", "Gradient"]
 
         # Project Name Labels
