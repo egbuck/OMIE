@@ -16,6 +16,9 @@ class ParamDetail(tk.Frame):
                 setattr(self, attr, getattr(Proj, attr))
         self.type_choices = ["Single", "Uniform", "Gradient"]
 
+        # Window Title
+        self.master.title("Parameters & Analysis")
+
         # Project Name Labels
         self.name_header, self.name_prefix = \
             tk.Label(self, text = "Project Definition", font = "Helvetica 9 bold"), \

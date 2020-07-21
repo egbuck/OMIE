@@ -5,7 +5,7 @@ class AddProject(tk.Frame):
         # Initialize Tk() class
         super().__init__()
 
-        ## Default Parameters & Title
+        ## Default Parameters
         self.ini_name = "Project1"
         self.ini_num_invest, self.ini_num_flows = 0, 5
         self.ini_rand_data = True
