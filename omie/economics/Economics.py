@@ -53,8 +53,8 @@ class Economics(tk.Tk):
         project.menubar.add_cascade(label="Edit", menu=project.editMenu)
 
         ## Next Button, Pack Frame, & Set Current Frame
-        self.next_button = tk.Button(project, text = "Next", 
-            command=self.param_detail, bg = "green")
+        self.next_button = tk.Button(project, text = "Next",
+            command=self.param_detail, bg = "#00bd21", fg = "#f5fcf6")
         self.next_button.grid(row = 0, column = 2, padx = 5)
         project.pack(fill = "both", expand=True)
         self.current_frame = project

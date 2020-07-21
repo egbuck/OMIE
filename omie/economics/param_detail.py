@@ -4,8 +4,8 @@ class ParamDetail(tk.Frame):
 
     def __init__(self, Proj):
         super().__init__()
-        attr_list = ["name", "num_invest", "num_flows", "rand_data", 
-            "mult", "inflation", "taxes", "uncertainty", 
+        attr_list = ["name", "num_invest", "num_flows", "rand_data",
+            "mult", "inflation", "taxes", "uncertainty",
             "depreciation", "distribution", "estimate"]
         for attr in attr_list:
             setattr(self, attr, getattr(Proj, attr))
@@ -73,7 +73,7 @@ class ParamDetail(tk.Frame):
             tk.Label(self, text = "CF. NPW ($)", font = "Helvetica 8 bold")
         ])
         # Type Vars, Type Choices, & Index Labels
-        setattr(self, prefix + "_types", 
+        setattr(self, prefix + "_types",
             [tk.StringVar(self) for _ in range(1, num_prefix + 1)])
         setattr(self, prefix + "_indexes",
             [tk.Label(self, text = str(x)) for x in range(1, num_prefix + 1)])
@@ -81,9 +81,9 @@ class ParamDetail(tk.Frame):
         # Entry widgets
         setattr(self, prefix + "_description_ents",
             [tk.Entry(self) for _ in range(1, num_prefix + 1)])
-        setattr(self, prefix + "_amount_ents", 
+        setattr(self, prefix + "_amount_ents",
             [tk.Entry(self) for _ in range(1, num_prefix + 1)])
-        setattr(self, prefix + "_start_ents", 
+        setattr(self, prefix + "_start_ents",
             [tk.Entry(self) for _ in range(1, num_prefix + 1)])
         setattr(self, prefix + "_end_ents",
             [tk.Entry(self) for _ in range(1, num_prefix + 1)])
@@ -110,9 +110,9 @@ class ParamDetail(tk.Frame):
 
         # Drop-Down Type Menus
         setattr(self, prefix + "_type_menus", [tk.OptionMenu(
-            self, getattr(self, prefix + "_types")[x], *self.type_choices, 
-            command = lambda t = getattr(self, prefix + "_types")[x], 
-                e = getattr(self, prefix + "_end_ents")[x], 
+            self, getattr(self, prefix + "_types")[x], *self.type_choices,
+            command = lambda t = getattr(self, prefix + "_types")[x],
+                e = getattr(self, prefix + "_end_ents")[x],
                 p = getattr(self, prefix + "_parameter_ents")[x]: self.check_type(t, e, p)
             ) for x in range(0, num_prefix)
         ])
@@ -126,7 +126,7 @@ class ParamDetail(tk.Frame):
 
         # Periods Params - row 0 - 3, column 2-3
         self.period_header.grid(row = 0, column = 3)
-        self.life_label.grid(row = 1, column = 2, sticky = tk.E) 
+        self.life_label.grid(row = 1, column = 2, sticky = tk.E)
         self.life.grid(row = 1, column = 3)
         self.reps_label.grid(row = 2, column = 2, sticky = tk.E)
         self.reps.grid(row = 2, column = 3)
@@ -138,61 +138,48 @@ class ParamDetail(tk.Frame):
         self.rates_label.grid(row = 1, column = 4, sticky = tk.E)
         self.rate_percent.grid(row = 1, column = 5)
 
+        ## Tables
         # Invest Table
         if self.num_invest > 0:
-            # Main Table Title & Headers
-            self.invest_table_title.grid(row = 5, column = 0, columnspan = 7, 
-                sticky = tk.W, pady = (15,0))
-            for col_index, header in enumerate(self.invest_table_headers):
-                header.grid(row = 6, column = col_index)
-
-            # Index Labels
-            for row_index, index_num in enumerate(self.invest_indexes):
-                index_num.grid(row = row_index + 7, column = 0)
-
-            # Entry Widgets
-            column_index = 1
-            for entry_widget in self.invest_entry_widgets:
-                if column_index == 3: # need to skip over type's column
-                    column_index += 1
-                for row_index in range(7, self.num_invest + 7):
-                    entry_widget[row_index - 7].grid(row = row_index, column = column_index)
-                column_index += 1
-
-            # Drop-Down Type Menus
-            for row_index, type_menu in enumerate(self.invest_type_menus):
-                type_menu.grid(row = row_index + 7, column = 3)
+            self.place_table("invest", self.num_invest)
         # Num Flows Table
         if self.num_flows > 0:
-            # Main Table Title & Headers
-            self.flow_table_title.grid(row = 5, column = 0, columnspan = 7, 
-                sticky = tk.W, pady = (15,0))
-            for col_index, header in enumerate(self.flow_table_headers):
-                header.grid(row = 6, column = col_index)
+            self.place_table("flow", self.num_flows)
 
-            # Index Labels
-            for row_index, index_num in enumerate(self.flow_indexes):
-                index_num.grid(row = row_index + 7, column = 0)
+    def place_table(self, prefix, num_prefix):
+        """Place the table with prefix in grid"""
+        # Define row buffer for if invest or flow table
+        row_buffer = 0 if prefix == "invest" else 2 + self.num_invest
 
-            # Entry Widgets
-            column_index = 1
-            for entry_widget in self.flow_entry_widgets:
-                if column_index == 3: # need to skip over type's column
-                    column_index += 1
-                for row_index in range(7, self.num_flows + 7):
-                    entry_widget[row_index - 7].grid(row = row_index, column = column_index)
+        # Main Table Title & Headers
+        getattr(self, prefix + "_table_title").grid(row = 5 + row_buffer, column = 0, columnspan = 7,
+            sticky = tk.W, pady = (15,0))
+        for col_index, header in enumerate(getattr(self, prefix + "_table_headers")):
+            header.grid(row = 6 + row_buffer, column = col_index)
+
+        # Index Labels
+        for row_index, index_num in enumerate(getattr(self, prefix + "_indexes")):
+            index_num.grid(row = row_index + 7 + row_buffer, column = 0)
+
+        # Entry Widgets
+        column_index = 1
+        for entry_widget in getattr(self, prefix + "_entry_widgets"):
+            if column_index == 3: # need to skip over type's column
                 column_index += 1
+            for row_index in range(7, num_prefix + 7):
+                entry_widget[row_index - 7].grid(row = row_index + row_buffer, column = column_index)
+            column_index += 1
 
-            # Drop-Down Type Menus
-            for row_index, type_menu in enumerate(self.flow_type_menus):
-                type_menu.grid(row = row_index + 7, column = 3)
+        # Drop-Down Type Menus
+        for row_index, type_menu in enumerate(getattr(self, prefix + "_type_menus")):
+            type_menu.grid(row = row_index + 7 + row_buffer, column = 3)
 
 
 if __name__ == "__main__":
     class FakeAddProj():
         def __init__(self):
-            attr_dict = {"name":"Project1", "num_invest":0, "num_flows":5, "rand_data":False, 
-                "mult":False, "inflation":False, "taxes":False, "uncertainty":False, 
+            attr_dict = {"name":"Project1", "num_invest":2, "num_flows":5, "rand_data":False,
+                "mult":False, "inflation":False, "taxes":False, "uncertainty":False,
                 "depreciation":"None", "distribution":"Triangular", "estimate":"Mean"}
             for attr in attr_dict:
                 setattr(self, attr, attr_dict[attr])
