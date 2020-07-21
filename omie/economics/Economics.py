@@ -65,8 +65,6 @@ class Economics(tk.Tk):
         self.basic_menu_bar(details)
 
         ## Compute Rates Button, Pack Frame, & Set Current Frame
-        self.compute_rates_button = tk.Button(details, text = "Compute Rates",
-            command=self.compute_rates, bg = "#00bd21", fg = "#f5fcf6")
         details.pack(fill = "both", expand=True)
         self.current_frame = details
 
@@ -80,9 +78,6 @@ class Economics(tk.Tk):
         frame.fileMenu.add_command(label="Return to Main Menu", command=self.main_menu)
         frame.menubar.add_cascade(label="File", menu=frame.fileMenu)
 
-    def compute_rates(self):
-        """Compute Rates for Cash Flow Analysis"""
-        pass
 
 if __name__ == "__main__":
     main()

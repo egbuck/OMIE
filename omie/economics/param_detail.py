@@ -51,6 +51,10 @@ class ParamDetail(tk.Frame):
                 font = "Helvetica 9 bold")
             self.create_table(prefix = "invest", num_prefix = self.num_invest)
 
+        # Compute Rates Button
+        self.compute_rates_button = tk.Button(self, text = "Compute Rates",
+            command=self.compute_rates, bg = "#00bd21", fg = "#f5fcf6")
+
         # Place the widgets in grids
         self.place_widgets()
 
@@ -76,9 +80,7 @@ class ParamDetail(tk.Frame):
             tk.Label(self, text = "Type", font = "Helvetica 8 bold"),
             tk.Label(self, text = "Start", font = "Helvetica 8 bold"),
             tk.Label(self, text = "End", font = "Helvetica 8 bold"),
-            tk.Label(self, text = "Parameter", font = "Helvetica 8 bold"),
-            tk.Label(self, text = "Factor", font = "Helvetica 8 bold"),
-            tk.Label(self, text = "CF. NPW ($)", font = "Helvetica 8 bold")
+            tk.Label(self, text = "Parameter", font = "Helvetica 8 bold")
         ])
         # Type Vars, Type Choices, & Index Labels
         setattr(self, prefix + "_types",
@@ -97,18 +99,12 @@ class ParamDetail(tk.Frame):
             [tk.Entry(self) for _ in range(1, num_prefix + 1)])
         setattr(self, prefix + "_parameter_ents",
             [tk.Entry(self) for _ in range(1, num_prefix + 1)])
-        setattr(self, prefix + "_factor_ents",
-            [tk.Entry(self) for _ in range(1, num_prefix + 1)])
-        setattr(self, prefix + "_cf_npw_ents",
-            [tk.Entry(self) for _ in range(1, num_prefix + 1)])
         setattr(self, prefix + "_entry_widgets", [
             getattr(self, prefix + "_description_ents"),
             getattr(self, prefix + "_amount_ents"),
             getattr(self, prefix + "_start_ents"),
             getattr(self, prefix + "_end_ents"),
-            getattr(self, prefix + "_parameter_ents"),
-            getattr(self, prefix + "_factor_ents"),
-            getattr(self, prefix + "_cf_npw_ents")
+            getattr(self, prefix + "_parameter_ents")
         ])
         # Change disabled background color of end and param entries
         for end_ent in getattr(self, prefix + "_end_ents"):
@@ -146,6 +142,9 @@ class ParamDetail(tk.Frame):
         self.rates_label.grid(row = 1, column = 4, sticky = tk.E)
         self.rate_percent.grid(row = 1, column = 5)
 
+        # Compute Rates Button
+        self.compute_rates_button.grid(row = 3, column = 5)
+
         ## Tables
         # Invest Table
         if self.num_invest > 0:
@@ -182,6 +181,17 @@ class ParamDetail(tk.Frame):
         for row_index, type_menu in enumerate(getattr(self, prefix + "_type_menus")):
             type_menu.grid(row = row_index + 7 + row_buffer, column = 3)
 
+    def compute_rates(self):
+        """Compute rates for cash flow analysis"""
+        # Headers
+        tk.Label(self, text = "Factor", font = "Helvetica 8 bold"),
+        tk.Label(self, text = "CF. NPW ($)", font = "Helvetica 8 bold")
+        # Values - needs to be changed to Label widgets
+        setattr(self, prefix + "_factor_ents",
+            [tk.Entry(self) for _ in range(1, num_prefix + 1)])
+        setattr(self, prefix + "_cf_npw_ents",
+            [tk.Entry(self) for _ in range(1, num_prefix + 1)])
+        # Still need to place everything on grid below, or in another function
 
 if __name__ == "__main__":
     class FakeAddProj():
