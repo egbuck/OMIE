@@ -14,11 +14,8 @@ class AddProject(tk.Frame):
         self.ini_depreciation, self.ini_distribution, self.ini_estimate = \
             "None", "Triangular", "Mean"
 
-        ## Window Title & Default Button - other buttons in Economics method
+        ## Window Title
         self.master.title("Add Project")
-        # Default Button - other buttons in Economics method
-        self.default_button = tk.Button(self, text = "Default Params", command = self.restore_defaults)
-
 
         ## Entry widgets & their labels
         self.name_label, self.name = \
@@ -116,9 +113,6 @@ class AddProject(tk.Frame):
         self.depreciation_label.grid(row = 7, column = 0, sticky = tk.W, pady=(3,0))
         self.distribution_label.grid(row = 7, column = 1, sticky = tk.W, pady=(3,0))
         self.estimate_label.grid(row = 7, column = 2, sticky = tk.W, pady=(3,0))
-
-        # Command Buttons
-        self.default_button.grid(row = 2, column = 2, padx = 5)
 
         ## Fill widgets with their default values
         self.restore_defaults()

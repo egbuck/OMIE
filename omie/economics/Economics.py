@@ -52,11 +52,10 @@ class Economics(tk.Tk):
         project.editMenu.add_command(label="Default Params", command=project.restore_defaults)
         project.menubar.add_cascade(label="Edit", menu=project.editMenu)
 
-        ## Other Buttons
-        self.next_button = tk.Button(project, text = "Next Step", command=self.param_detail)
-        self.return_button = tk.Button(project, text = "Return To Main Menu", command = self.main_menu)
+        ## Next Button, Pack Frame, & Set Current Frame
+        self.next_button = tk.Button(project, text = "Next", 
+            command=self.param_detail, bg = "green")
         self.next_button.grid(row = 0, column = 2, padx = 5)
-        self.return_button.grid(row = 1, column = 2, padx = 5)
         project.pack(fill = "both", expand=True)
         self.current_frame = project
 

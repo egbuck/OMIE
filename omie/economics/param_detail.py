@@ -32,45 +32,16 @@ class ParamDetail(tk.Frame):
             tk.Label(self, text = "MARR (/yr)")
         self.rate_percent = tk.Entry(self)
 
-        # Main Table - Title & Headers
-        self.table_title = tk.Label(self, 
-            text = ("Cash Flow Data - Amounts Negative for "
-            "Expenditures and Positive for Revenues"), font = "Helvetica 9 bold")
-        self.table_headers = [
-            tk.Label(self, text = "Index", font = "Helvetica 8 bold"),
-            tk.Label(self, text = "Description", font = "Helvetica 8 bold"),
-            tk.Label(self, text = "Amount($)", font = "Helvetica 8 bold"),
-            tk.Label(self, text = "Type", font = "Helvetica 8 bold"),
-            tk.Label(self, text = "Start", font = "Helvetica 8 bold"),
-            tk.Label(self, text = "End", font = "Helvetica 8 bold"),
-            tk.Label(self, text = "Parameter", font = "Helvetica 8 bold"),
-            tk.Label(self, text = "Factor", font = "Helvetica 8 bold"),
-            tk.Label(self, text = "CF. NPW ($)", font = "Helvetica 8 bold")
-        ]
-        # Type Vars, Type Choices, & Index Labels
-        self.types = [tk.StringVar(self) for _ in range(1, self.num_flows + 1)]
-        self.indexes = [tk.Label(self, text = str(x)) for x in range(1, self.num_flows + 1)]
-
-        # Entry widgets
-        self.description_ents = [tk.Entry(self) for _ in range(1, self.num_flows + 1)]
-        self.amount_ents = [tk.Entry(self) for _ in range(1, self.num_flows + 1)]
-        self.start_ents = [tk.Entry(self) for _ in range(1, self.num_flows + 1)]
-        self.end_ents = [tk.Entry(self) for _ in range(1, self.num_flows + 1)]
-        self.parameter_ents = [tk.Entry(self) for _ in range(1, self.num_flows + 1)]
-        self.factor_ents = [tk.Entry(self) for _ in range(1, self.num_flows + 1)]
-        self.cf_npw_ents = [tk.Entry(self) for _ in range(1, self.num_flows + 1)]
-        self.entry_widgets = [self.description_ents, self.amount_ents,
-            self.start_ents, self.end_ents, self.parameter_ents,
-            self.factor_ents, self.cf_npw_ents]
-
-        # Drop-Down Type Menus
-        self.type_menus = [tk.OptionMenu(
-            self, self.types[x], *self.type_choices, 
-            command = lambda t = self.types[x], 
-                e = self.end_ents[x], 
-                p = self.parameter_ents[x]: self.check_type(t, e, p)
-            ) for x in range(0, self.num_flows)
-        ]
+        if self.num_flows > 0:
+            self.flow_table_title = tk.Label(self,
+                text = ("Cash Flow Data - Amounts Negative for "
+                "Expenditures and Positive for Revenues"), font = "Helvetica 9 bold")
+            self.create_table(prefix = "flow", num_prefix = self.num_flows)
+        if self.num_invest > 0:
+            self.invest_table_title = tk.Label(self,
+                text = "Investment Data - Amounts Negative for Investments",
+                font = "Helvetica 9 bold")
+            self.create_table(prefix = "invest", num_prefix = self.num_invest)
 
         # Place the widgets in grids
         self.place_widgets()
@@ -86,6 +57,65 @@ class ParamDetail(tk.Frame):
         else:
             end_entry.configure(state="normal")
             param_entry.configure(state="normal")
+
+    def create_table(self, prefix, num_prefix):
+        """Create table widgets for invest or flow data entry"""
+        # Table Headers
+        setattr(self, prefix + "_table_headers", [
+            tk.Label(self, text = "Index", font = "Helvetica 8 bold"),
+            tk.Label(self, text = "Description", font = "Helvetica 8 bold"),
+            tk.Label(self, text = "Amount($)", font = "Helvetica 8 bold"),
+            tk.Label(self, text = "Type", font = "Helvetica 8 bold"),
+            tk.Label(self, text = "Start", font = "Helvetica 8 bold"),
+            tk.Label(self, text = "End", font = "Helvetica 8 bold"),
+            tk.Label(self, text = "Parameter", font = "Helvetica 8 bold"),
+            tk.Label(self, text = "Factor", font = "Helvetica 8 bold"),
+            tk.Label(self, text = "CF. NPW ($)", font = "Helvetica 8 bold")
+        ])
+        # Type Vars, Type Choices, & Index Labels
+        setattr(self, prefix + "_types", 
+            [tk.StringVar(self) for _ in range(1, num_prefix + 1)])
+        setattr(self, prefix + "_indexes",
+            [tk.Label(self, text = str(x)) for x in range(1, num_prefix + 1)])
+
+        # Entry widgets
+        setattr(self, prefix + "_description_ents",
+            [tk.Entry(self) for _ in range(1, num_prefix + 1)])
+        setattr(self, prefix + "_amount_ents", 
+            [tk.Entry(self) for _ in range(1, num_prefix + 1)])
+        setattr(self, prefix + "_start_ents", 
+            [tk.Entry(self) for _ in range(1, num_prefix + 1)])
+        setattr(self, prefix + "_end_ents",
+            [tk.Entry(self) for _ in range(1, num_prefix + 1)])
+        setattr(self, prefix + "_parameter_ents",
+            [tk.Entry(self) for _ in range(1, num_prefix + 1)])
+        setattr(self, prefix + "_factor_ents",
+            [tk.Entry(self) for _ in range(1, num_prefix + 1)])
+        setattr(self, prefix + "_cf_npw_ents",
+            [tk.Entry(self) for _ in range(1, num_prefix + 1)])
+        setattr(self, prefix + "_entry_widgets", [
+            getattr(self, prefix + "_description_ents"),
+            getattr(self, prefix + "_amount_ents"),
+            getattr(self, prefix + "_start_ents"),
+            getattr(self, prefix + "_end_ents"),
+            getattr(self, prefix + "_parameter_ents"),
+            getattr(self, prefix + "_factor_ents"),
+            getattr(self, prefix + "_cf_npw_ents")
+        ])
+        # Change disabled background color of end and param entries
+        for end_ent in getattr(self, prefix + "_end_ents"):
+            end_ent.config(disabledbackground = "#808080") # darker gray
+        for end_ent in getattr(self, prefix + "_parameter_ents"):
+            end_ent.config(disabledbackground = "#808080")
+
+        # Drop-Down Type Menus
+        setattr(self, prefix + "_type_menus", [tk.OptionMenu(
+            self, getattr(self, prefix + "_types")[x], *self.type_choices, 
+            command = lambda t = getattr(self, prefix + "_types")[x], 
+                e = getattr(self, prefix + "_end_ents")[x], 
+                p = getattr(self, prefix + "_parameter_ents")[x]: self.check_type(t, e, p)
+            ) for x in range(0, num_prefix)
+        ])
 
     def place_widgets(self):
         """Place the widgets in their grids"""
@@ -108,28 +138,54 @@ class ParamDetail(tk.Frame):
         self.rates_label.grid(row = 1, column = 4, sticky = tk.E)
         self.rate_percent.grid(row = 1, column = 5)
 
-        # Main Table Title & Headers
-        self.table_title.grid(row = 5, column = 0, columnspan = 7, 
-            sticky = tk.W, pady = (15,0))
-        for col_index, header in enumerate(self.table_headers):
-            header.grid(row = 6, column = col_index)
+        # Invest Table
+        if self.num_invest > 0:
+            # Main Table Title & Headers
+            self.invest_table_title.grid(row = 5, column = 0, columnspan = 7, 
+                sticky = tk.W, pady = (15,0))
+            for col_index, header in enumerate(self.invest_table_headers):
+                header.grid(row = 6, column = col_index)
 
-        # Index Labels
-        for row_index, index_num in enumerate(self.indexes):
-            index_num.grid(row = row_index + 7, column = 0)
+            # Index Labels
+            for row_index, index_num in enumerate(self.invest_indexes):
+                index_num.grid(row = row_index + 7, column = 0)
 
-        # Entry Widgets
-        column_index = 1
-        for entry_widget in self.entry_widgets:
-            if column_index == 3: # need to skip over type's column
+            # Entry Widgets
+            column_index = 1
+            for entry_widget in self.invest_entry_widgets:
+                if column_index == 3: # need to skip over type's column
+                    column_index += 1
+                for row_index in range(7, self.num_invest + 7):
+                    entry_widget[row_index - 7].grid(row = row_index, column = column_index)
                 column_index += 1
-            for row_index in range(7, self.num_flows + 7):
-                entry_widget[row_index - 7].grid(row = row_index, column = column_index)
-            column_index += 1
 
-        # Drop-Down Type Menus
-        for row_index, type_menu in enumerate(self.type_menus):
-            type_menu.grid(row = row_index + 7, column = 3)
+            # Drop-Down Type Menus
+            for row_index, type_menu in enumerate(self.invest_type_menus):
+                type_menu.grid(row = row_index + 7, column = 3)
+        # Num Flows Table
+        if self.num_flows > 0:
+            # Main Table Title & Headers
+            self.flow_table_title.grid(row = 5, column = 0, columnspan = 7, 
+                sticky = tk.W, pady = (15,0))
+            for col_index, header in enumerate(self.flow_table_headers):
+                header.grid(row = 6, column = col_index)
+
+            # Index Labels
+            for row_index, index_num in enumerate(self.flow_indexes):
+                index_num.grid(row = row_index + 7, column = 0)
+
+            # Entry Widgets
+            column_index = 1
+            for entry_widget in self.flow_entry_widgets:
+                if column_index == 3: # need to skip over type's column
+                    column_index += 1
+                for row_index in range(7, self.num_flows + 7):
+                    entry_widget[row_index - 7].grid(row = row_index, column = column_index)
+                column_index += 1
+
+            # Drop-Down Type Menus
+            for row_index, type_menu in enumerate(self.flow_type_menus):
+                type_menu.grid(row = row_index + 7, column = 3)
 
 
 if __name__ == "__main__":
