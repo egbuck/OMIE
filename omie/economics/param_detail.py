@@ -80,8 +80,11 @@ class ParamDetail(tk.Frame):
             tk.Label(self, text = "Type", font = "Helvetica 8 bold"),
             tk.Label(self, text = "Start", font = "Helvetica 8 bold"),
             tk.Label(self, text = "End", font = "Helvetica 8 bold"),
-            tk.Label(self, text = "Parameter", font = "Helvetica 8 bold")
         ])
+        if prefix == "flow":
+            getattr(self, prefix + "_table_headers").append(tk.Label(self, text = "Parameter", font = "Helvetica 8 bold"))
+        else:
+            getattr(self, prefix + "_table_headers").append(tk.Label(self, text = "Salvage", font = "Helvetica 8 bold"))
         # Type Vars, Type Choices, & Index Labels
         setattr(self, prefix + "_types",
             [tk.StringVar(self) for _ in range(1, num_prefix + 1)])
@@ -113,13 +116,17 @@ class ParamDetail(tk.Frame):
             end_ent.config(disabledbackground = "#808080")
 
         # Drop-Down Type Menus
-        setattr(self, prefix + "_type_menus", [tk.OptionMenu(
-            self, getattr(self, prefix + "_types")[x], *self.type_choices,
-            command = lambda t = getattr(self, prefix + "_types")[x],
-                e = getattr(self, prefix + "_end_ents")[x],
-                p = getattr(self, prefix + "_parameter_ents")[x]: self.check_type(t, e, p)
-            ) for x in range(0, num_prefix)
-        ])
+        if prefix == "flow":
+            setattr(self, prefix + "_type_menus", [tk.OptionMenu(
+                self, getattr(self, prefix + "_types")[x], *self.type_choices,
+                command = lambda t = getattr(self, prefix + "_types")[x],
+                    e = getattr(self, prefix + "_end_ents")[x],
+                    p = getattr(self, prefix + "_parameter_ents")[x]: self.check_type(t, e, p)
+                ) for x in range(0, num_prefix)
+            ])
+        else:
+            setattr(self, prefix + "_type_menus", [tk.Label(
+                self, text = "Investment") for _ in range(0, num_prefix)])
 
     def place_widgets(self):
         """Place the widgets in their grids"""
@@ -182,10 +189,23 @@ class ParamDetail(tk.Frame):
             type_menu.grid(row = row_index + 7 + row_buffer, column = 3)
 
     def compute_rates(self):
-        """Compute rates for cash flow analysis"""
+        """Compute rates for cash flow analysis
+
+        Study Period = Life(yrs) * Repetitions
+        NPW = Factor * Amount
+        Factor = E_Factor{_Inv}(MARR, Type, Start, End, Param/Salvage)
+            {_Inv} if investment, different function otherwise
+        Present (Life) = Sum(All NPW)
+        Uniform (Life) = -PMT(MARR, Life(yrs), 1) * Present(Life)
+        Present (SP) = -PV(MARR, Study Period, 1) * Uniform(Life)
+        IRR - Algorithm...
+        """
         # Headers
         tk.Label(self, text = "Factor", font = "Helvetica 8 bold"),
-        tk.Label(self, text = "CF. NPW ($)", font = "Helvetica 8 bold")
+        if prefix == "flow":
+            tk.Label(self, text = "CF. NPW ($)", font = "Helvetica 8 bold")
+        else:
+            tk.Label(self, text = "Fin. NPW ($)", font = "Helvetica 8 bold")
         # Values - needs to be changed to Label widgets
         setattr(self, prefix + "_factor_ents",
             [tk.Entry(self) for _ in range(1, num_prefix + 1)])
