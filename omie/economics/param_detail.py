@@ -1,4 +1,5 @@
 import tkinter as tk
+import numpy_financial as npf
 
 class ParamDetail(tk.Frame):
 
@@ -200,6 +201,40 @@ class ParamDetail(tk.Frame):
         Present (SP) = -PV(MARR, Study Period, 1) * Uniform(Life)
         IRR - Algorithm...
         """
+        self.study_period = self.life * self.reps
+
+        # NPW & Factor Calcs
+        self.invest_factors, self.invest_npws = 0, 0
+        if self.num_invest > 0:
+            self.invest_factors = [1 for _ in self.num_invest]
+            self.invest_npws = [x.get() for x in self.invest_amount_ents]
+        self.flow_factors, self.flow_npws = 0, 0
+        if self.num_flows > 0:
+            self.flow_factors = [1/((1+self.marr)^(start.get())) for start in self.flow_start_ents]
+            self.flow_npws = [factor * amount.get() for factor, amount in zip(self.flow_factors, self.flow_amount_ents)]
+            
+        # present/uniform lifes & present sp
+        self.present_life = sum(self.invest_npw) + sum(self.flow_npw)
+        #self.uniform_life = 
+        #self.present_sp = 
+        # Calculate Internal rate of return
+        net_cash_flows = [0] * (self.num_flows + self.num_invest)
+        for i in range(self.num_invest):
+            start = self.invest_start_ents[i].get()
+            end = self.invest_end_ents[i].get()
+            amount = self.invest_amount_ents[i].get()
+            for period in range(start, end + 1):
+                net_cash_flows[period] += amount
+        for f in range(self.num_flows):
+            start = self.flow_start_ents[f].get()
+            end = self.flow_end_ents[f].get()
+            amount = self.flow_amount_ents[f].get()
+            for period in range(start, end + 1):
+                net_cash_flows[period] += amount
+        self.irr = npf.irr(net_cash_flows)
+
+    def place_rates(self):
+        """Place labels for showing output of compute_rates"""
         # Headers
         tk.Label(self, text = "Factor", font = "Helvetica 8 bold"),
         if prefix == "flow":
