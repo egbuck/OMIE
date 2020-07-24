@@ -1,6 +1,6 @@
 import tkinter as tk
 
-class AddProject(tk.Frame):
+class AddProjectGUI(tk.Frame):
     def __init__(self):
         # Initialize Tk() class
         super().__init__()

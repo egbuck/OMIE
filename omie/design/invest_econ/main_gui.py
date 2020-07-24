@@ -1,6 +1,6 @@
 import tkinter as tk
-from add_project import AddProject
-from param_detail import ParamDetail
+from add_project_gui import AddProjectGUI
+from param_detail_gui import ParamDetailGUI
 import tkinter.messagebox as msg
 
 def return_to_main_menu(window):
@@ -9,10 +9,10 @@ def return_to_main_menu(window):
     main()
 
 def main():
-    main_menu = Economics()
+    main_menu = InvestEconGUI()
     main_menu.mainloop()
 
-class Economics(tk.Tk):
+class InvestEconGUI(tk.Tk):
 
     def __init__(self):
         super().__init__()
@@ -39,7 +39,7 @@ class Economics(tk.Tk):
         self.current_frame = main_menu_frame
 
     def add_project(self):
-        project = AddProject()
+        project = AddProjectGUI()
         self.current_frame.destroy()
 
         ## Menu Bar
@@ -59,7 +59,7 @@ class Economics(tk.Tk):
 
     def param_detail(self, proj):
         """param detail frame"""
-        details = ParamDetail(proj)
+        details = ParamDetailGUI(proj)
         self.current_frame.destroy()
 
         ## Menu Bar
@@ -82,7 +82,7 @@ class Economics(tk.Tk):
 
     def econ_limitations(self):
         """Bring up message about limitations of current implementation"""
-        msg.showinfo("Limitations", message = 
+        msg.showinfo("Limitations", message =
         """There are several current limitations:
             1) Only 1 or 0 investments are allowed
             2) The investment must occur at start time 0

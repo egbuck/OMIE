@@ -1,7 +1,7 @@
 import tkinter as tk
 import numpy_financial as npf
 
-class ParamDetail(tk.Frame):
+class ParamDetailGUI(tk.Frame):
 
     def __init__(self, Proj):
         super().__init__()
