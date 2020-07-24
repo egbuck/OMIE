@@ -16,7 +16,7 @@ class Economics(tk.Tk):
     def __init__(self):
         super().__init__()
         # Window Size
-        self.geometry("425x350")  # width x height
+        self.geometry("1100x700")  # width x height
 
         # Set dummy frame to destroy and create/pack main menu frame
         self.current_frame = tk.Frame()

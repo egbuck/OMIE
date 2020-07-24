@@ -7,7 +7,7 @@ class AddProject(tk.Frame):
 
         ## Default Parameters
         self.ini_name = "Project1"
-        self.ini_num_invest, self.ini_num_flows = 0, 5
+        self.ini_num_invest, self.ini_num_flows = 1, 5
         self.ini_rand_data = True
         self.ini_mult, self.ini_inflation, self.ini_taxes, self.ini_uncertainty = \
             False, False, False, False

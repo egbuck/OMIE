@@ -32,8 +32,6 @@ class ParamDetail(tk.Frame):
             tk.Label(self, text = "Life (yrs)"), tk.Entry(self)
         self.reps_label, self.reps = \
             tk.Label(self, text = "Repetitions"), tk.Entry(self)
-        self.period_length_label, self.period_length = \
-            tk.Label(self, text = "Study Period"), tk.Entry(self)
 
         # Rates Param
         self.rates_header, self.rates_label = \
@@ -136,14 +134,12 @@ class ParamDetail(tk.Frame):
         self.name_prefix.grid(row = 1, column = 0, sticky = tk.E)
         self.name_label.grid(row = 1, column = 1, sticky = tk.W)
 
-        # Periods Params - row 0 - 3, column 2-3
+        # Periods Params - row 0 - 2, column 2-3
         self.period_header.grid(row = 0, column = 3)
         self.life_label.grid(row = 1, column = 2, sticky = tk.E)
         self.life.grid(row = 1, column = 3)
         self.reps_label.grid(row = 2, column = 2, sticky = tk.E)
         self.reps.grid(row = 2, column = 3)
-        self.period_length_label.grid(row = 3, column = 2, sticky = tk.E)
-        self.period_length.grid(row = 3, column = 3)
 
         # Rates params
         self.rates_header.grid(row = 0, column = 5)
@@ -229,21 +225,51 @@ class ParamDetail(tk.Frame):
             amount = float(self.flow_amount_ents[f].get())
             net_cash_flows[start] += amount
         self.irr = npf.irr(net_cash_flows)
+        self.place_rates()
 
     def place_rates(self):
-        """Place labels for showing output of compute_rates"""
-        # Headers
-        tk.Label(self, text = "Factor", font = "Helvetica 8 bold"),
-        if prefix == "flow":
-            tk.Label(self, text = "CF. NPW ($)", font = "Helvetica 8 bold")
-        else:
-            tk.Label(self, text = "Fin. NPW ($)", font = "Helvetica 8 bold")
-        # Values - needs to be changed to Label widgets
-        setattr(self, prefix + "_factor_ents",
-            [tk.Entry(self) for _ in range(1, num_prefix + 1)])
-        setattr(self, prefix + "_cf_npw_ents",
-            [tk.Entry(self) for _ in range(1, num_prefix + 1)])
-        # Still need to place everything on grid below, or in another function
+        """Define & Place labels for showing output of compute_rates"""
+        ## Define Labels
+        # Table Headers & Labels/Values
+        calc_bg_color = "#FFFF99"
+        for prefix in ["invest", "flow"]:
+            npw_prefix = "Fin. " if prefix == "invest" else "CF. "
+            num_prefix = self.num_invest if prefix == "invest" else self.num_flows
+            if num_prefix > 0:
+                getattr(self, prefix + "_table_headers").extend([
+                    tk.Label(self, text = "Factor", font = "Helvetica 8 bold"),
+                    tk.Label(self, text = npw_prefix + "NPW ($)", font = "Helvetica 8 bold")
+                ])
+                setattr(self, prefix + "_factor_labels",
+                    [tk.Label(self, text = str(x), bg = calc_bg_color) for x in getattr(self, prefix + "_factors")])
+                setattr(self, prefix + "_cf_npw_labels",
+                    [tk.Label(self, text = str(x), bg = calc_bg_color) for x in getattr(self, prefix + "_npws")])
+        # Study Period, Present (Life) & IRR
+        self.study_period_label, self.study_period_widg = \
+            tk.Label(self, text = "Study Period", bg = calc_bg_color), tk.Label(self, text = str(self.study_period), bg = calc_bg_color)
+        self.present_life_label, self.present_life_widg = \
+            tk.Label(self, text = "Present (Life)", bg = calc_bg_color), tk.Label(self, text = str(self.present_life), bg = calc_bg_color)
+        self.irr_label, self.irr_widg = \
+            tk.Label(self, text = "IRR", bg = calc_bg_color), tk.Label(self, text = str(self.irr), bg = calc_bg_color)
+
+        ## Place Labels in Grids
+        self.study_period_label.grid(row = 3, column = 2, sticky = tk.E)
+        self.present_life_label.grid(row = 1, column = 6, sticky = tk.E)
+        self.irr_label.grid(row = 2, column = 6, sticky = tk.E)
+        self.study_period_widg.grid(row = 3, column = 3)
+        self.present_life_widg.grid(row = 1, column = 7)
+        self.irr_widg.grid(row = 2, column = 7)
+
+        # Table Headers/Values
+        for prefix in ["invest", "flow"]:
+            row_buffer = 0 if prefix == "invest" else 2 + self.num_invest
+            num_prefix = self.num_invest if prefix == "invest" else self.num_flows
+            if num_prefix > 0:
+                getattr(self, prefix + "_table_headers")[-2].grid(row = 6 + row_buffer, column = 7)
+                getattr(self, prefix + "_table_headers")[-1].grid(row = 6 + row_buffer, column = 8)
+                for row_index in range(7, num_prefix + 7):
+                    getattr(self, prefix + "_factor_labels")[row_index - 7].grid(row = row_index + row_buffer, column = 7)
+                    getattr(self, prefix + "_cf_npw_labels")[row_index - 7].grid(row = row_index + row_buffer, column = 8)
 
 if __name__ == "__main__":
     class FakeAddProj():
