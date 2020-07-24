@@ -1,1 +1,1 @@
-from Economics import Economics
+from main_gui import InvestEconGUI
