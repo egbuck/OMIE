@@ -1,6 +1,3 @@
 1. toolbar for save project, export to excel in ParamDetail (both under File)
-2. Calc Fields shouldn't be Entry widgets - Label Boxes?
-3. Uses --- or something for calc fields when not run (***)
-   a) Fills them once it has run
-   b) Toolbar menu option for clearing calc fields (for if they want to change params)
-   c) Calc fields should have different background (yellow?)
+2. Toolbar menu option for clearing calc fields (for if they want to change params)
+3. Address some of the Limitations in the File -> Limitations msgbox
