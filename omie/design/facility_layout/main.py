@@ -43,10 +43,14 @@ class FacilityLayout(object):
         self.dept_info = pd.DataFrame({
             "Name": [f"D {x}" for x in e(1, len(dept_names) + 1)],
             "F/V": ["V" for _ in dept_names],
-            "Area": [10 for _ in dept_names]
+            "Area": [100 // len(dept_names) for _ in dept_names]
             }, index = dept_names)
         self.flow_matrix = pd.DataFrame()
         self.cost_matrix = pd.DataFrame()
         if self.layout_data["num_fixed"] > 0:
             self.fixed_points = pd.DataFrame()
             self.fixed_point_costs = pd.DataFrame()
+
+    def solve(self, solution_method, initial_solution, dist_metric,
+        plant_width, plant_length, dept_width):
+        pass
